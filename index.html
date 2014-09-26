@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/view.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="snippet1">Snippet 1</label>
+                <textarea class="form-control ui" rows="10" id="snippet1"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="snippet2">Snippet 2</label>
+                <textarea class="form-control ui" rows="10" id="snippet2"></textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="numberOfIterations">Number of iterations</label>
+                    <input type="number" class="form-control ui" id="numberOfIterations" value="1000" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-block ui">Compare!</button>
+            <button type="button" class="btn btn-danger btn-lg btn-block">Stop!</button>
+
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="reports">
+                <span class="label label-warning"></span>
+
+                <div class="alert">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
