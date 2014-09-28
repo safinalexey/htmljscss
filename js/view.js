@@ -4,10 +4,22 @@
  * Time: 14:32
  */
 
+ //TODO: A lot of selectors duplicate. Why not initialize them in one place  (init, constructor?) and use everywhere?
+ //TODO: Use one pattern for string quotes, ' or "
 function View() {
     var percent = 1;
 
-    this.checkInputs = function () {
+    this.getSnippetValues = function(){
+        return codes({code1:$('#snippet1').val(),
+                      code2:$('#snippet2').val()});
+    }
+
+    this.getNumberOfIterations = function(){
+        return $('#numberOfIterations').val();
+    }
+
+	// Check? For what?
+    this.validateInputs = function () {
         $("#snippet1").parent().removeClass('has-error');
         $("#snippet2").parent().removeClass('has-error');
         $("#numberOfIterations").parent().removeClass('has-error');
@@ -28,6 +40,7 @@ function View() {
     }
 
     this.checkSimilarity = function (code1, code2) {
+		//TODO: UI logic?
         if (code1 == code2) {
             $('.label-warning').show().html("<strong>Note!</strong> Your codes are similar")
         } else {
@@ -68,11 +81,12 @@ function View() {
         percent = 1;
     }
 
-    this.showResults = function (time1, time2) {
-        $('.alert').addClass('alert-success').append("<p>First test average time = " + "<span>" + time1 + "</span>" + " ms</p>");
-        $('.alert-success').append("<p>Second test average time = " + "<span>" + time2 + "</span>" + " ms</p>");
+    this.showResults = function (time) {
+        $('.alert').addClass('alert-success').append("<p>First test average time = " + "<span>" + time.firstCodeRunTime + "</span>" + " ms</p>");
+        $('.alert-success').append("<p>Second test average time = " + "<span>" + time.secondCodeRunTime + "</span>" + " ms</p>");
 
-        var ratio = (time1 / time2).toFixed(3);
+		// Also, why are we calculating it here? It's ok to have a rounding here.
+        var ratio = (time.firstCodeRunTime / time.secondCodeRunTime).toFixed(3);
         if (ratio > 1) {
             $('.alert-success').append("<p><strong>First code is " + ratio + " times slower then second</strong></p>");
         } else {

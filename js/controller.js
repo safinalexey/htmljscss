@@ -4,13 +4,46 @@
  * Time: 14:25
  */
 
-function Controller() {
+ // Common questions: why are we so dependable on only 2 code blocks to test?
+ 
+function Controller(view) {
 
-    var view = new View();
     var processor = 0;
     var stopped = false;
+    var isFirstTest = true;
 
-    this.testCode = function (code1, code2) {
+    /**
+     *
+     */
+    this.compareButtonHandler = function(){
+        if(!isFirstTest) view.clear()
+
+        var inputsOk = view.validateInputs()
+
+        if (inputsOk){
+            var codes = view.getSnippetValues();
+
+            view.checkSimilarity(codes.code1, codes.code2)
+
+            var testRun = this.testRun(codes.code1, codes.code2)
+            if (testRun == 'ok') {
+                view.removeError()
+                this.testCodeEvalTime(codes.code1, codes.code2)
+                isFirstTest = false;
+            } else if (testRun != true){
+                view.showError(testRun)
+            }
+        }
+    }
+
+    /**
+     * Test codes one time for any errors
+     * @param code1
+     * @param code2
+     * @returns {string}
+     */
+
+    this.testRun = function (code1, code2) {
         try {
             eval(code1);
         } catch (e) {
@@ -19,32 +52,42 @@ function Controller() {
         try {
             eval(code2);
         } catch (e) {
-            console.log(11)
             return "Second snippet error: " + e.name;
         }
-        return true
+        return 'ok';
     }
 
-    this.test = function (code, code2, numberOfIterations) {
+    /**
+     *
+     * @param code
+     * @param code2
+     */
+    this.testCodeEvalTime = function (code, code2) {
         view.disableUI();
         stopped = false;
-        var i = 0, limit = numberOfIterations, time = [0, 0];
+        var i = 0, limit = view.getNumberOfIterations(), time = [0, 0];
 
+		//Not good, use setTimeout instead
         processor = setInterval(function () {
             if (stopped) return;
-            time[0] += tryEval(code);
-            time[1] += tryEval(code2);
+            time.firstCodeRunTime += tryEval(code);
+            time.secondCodeRunTime += tryEval(code2);
 
             if (++i == limit) {
                 clearInterval(processor);
 
-                view.showResults(time[0], time[1]);
+                view.showResults(time);
                 return;
             }
             if (i % 10 == 0) view.progressInc();
         }, 10)
     }
 
+    /**
+     * Runs only after this.testRun
+     * @param code
+     * @returns {number}
+     */
     function tryEval(code) {
         var begin = Date.now();
         eval(code);
@@ -52,7 +95,11 @@ function Controller() {
         return end - begin;
     }
 
+    /**
+     *
+     */
     this.stopTest = function () {
+        view.enableUI()
         stopped = true;
     }
 }
