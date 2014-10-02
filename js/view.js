@@ -4,7 +4,6 @@
  * Time: 14:32
  */
 
-    //TODO: A lot of selectors duplicate. Why not initialize them in one place  (init, constructor?) and use everywhere?
     //TODO: templating
 function View() {
     var percent = 1;
@@ -87,13 +86,13 @@ function View() {
     };
 
     this.showResults = function (time, ratio) {
-        alert.addClass('alert-success').append('<p>First test average time = ' + '<span>' + time.firstCodeRunTime + '</span>' + ' ms</p>');
-        $('.alert-success', alert).append('<p>Second test average time = ' + '<span>' + time.secondCodeRunTime + '</span>' + ' ms</p>');
+        alert.addClass('alert-success').append('<p>First test average time = ' + '<span>' + time.firstCodeRunTime/1000 + '</span>' + ' ms</p>');
+        $('.alert-success').append('<p>Second test average time = ' + '<span>' + time.secondCodeRunTime/1000 + '</span>' + ' ms</p>');
 
         if (ratio > 1) {
-            $('.alert-success', alert).append('<p><strong>First code is ' + ratio + ' times slower then second</strong></p>');
+            $('.alert-success').append('<p><strong>First code is ' + ratio + ' times slower then second</strong></p>');
         } else {
-            $('.alert-success', alert).append('<p><strong>First code is ' + (1 / ratio).toFixed(3) + ' times faster then second</strong></p>');
+            $('.alert-success').append('<p><strong>First code is ' + (1 / ratio).toFixed(3) + ' times faster then second</strong></p>');
         }
         this.enableUI();
     };

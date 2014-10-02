@@ -24,7 +24,7 @@ function Controller(view) {
         if (inputsOk) {
             var codes = view.getSnippetValues();
 
-            if (codes.code1 = codes.code2){
+            if (codes.code1 = codes.code2) {
                 view.showSimilarityWarning();
             } else {
                 view.hideSimilarityWarning();
@@ -71,26 +71,27 @@ function Controller(view) {
     this.testCodeEvalTime = function (code, code2) {
         view.disableUI();
         stopped = false;
-        var i = 0,
+        var i,
+            j = 0,
             limit = view.getNumberOfIterations(),
-            time = {firstCodeRunTime:0,secondCodeRunTime:0};
+            time = {firstCodeRunTime: 0, secondCodeRunTime: 0},
+            incPercent = limit / 100;
 
-        //Not good, use setTimeout instead
-        for(i = 0; i < limit; i++){
-            console.log('inside loop '+i)
-            setTimeout(function () {
-                console.log('inside timeout '+i)
+        for (i = 0; i < limit; i++) {
+            processor = setTimeout(function () {
                 if (stopped) return;
                 time.firstCodeRunTime += tryEval(code);
                 time.secondCodeRunTime += tryEval(code2);
+                if (j == limit-1) {
+                    var ratio = (time.firstCodeRunTime / time.secondCodeRunTime).toFixed(3);
+                    view.showResults(time, ratio);
+                }
 
-                if (i % 10 == 0) view.progressInc();
-            }, 10)
-        }
-        if (++i == limit) {
-
-            var ratio = (time.firstCodeRunTime / time.secondCodeRunTime).toFixed(3);
-            view.showResults(time, ratio);
+                if (j % incPercent == 0 && j < limit) {
+                    view.progressInc();
+                }
+                j++;
+            }, 100);
         }
     };
 

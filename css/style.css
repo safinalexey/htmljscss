@@ -17,3 +17,8 @@ textarea
 {
     margin-top: 20px;
 }
+
+.progress-bar
+{
+    transition: none;
+}
